@@ -1,5 +1,4 @@
 {
-  "itemGroup.aeronautics_slicer": "Example Mod Tab",
-  "block.aeronautics_slicer.example_block": "Example Block",
-  "item.aeronautics_slicer.example_item": "Example Item"
+  "itemGroup.aeronautics_slicer": "Aeronautics: Sublevel Slicer",
+  "item.aeronautics_slicer.sublevel_slicer": "Sublevel Slicer"
 }
