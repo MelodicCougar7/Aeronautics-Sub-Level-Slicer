@@ -1,5 +1,6 @@
 package org.github.melodiccougar7.aeronautics_slicer.client.animation;
 
+import mod.azure.azurelib.common.animation.AzAnimatorConfig;
 import mod.azure.azurelib.common.animation.cache.AzBoneCache;
 import mod.azure.azurelib.common.animation.controller.AzAnimationController;
 import mod.azure.azurelib.common.animation.controller.AzAnimationControllerContainer;
@@ -24,6 +25,10 @@ public class SLSAnimator extends AzItemAnimator {
             ModClass.MODID,
             "animations/item/sublevel_slicer.animation.json"
     );
+
+    public SLSAnimator() {
+        super(AzAnimatorConfig.defaultConfig());
+    }
 
     @Override
     public void registerControllers(AzAnimationControllerContainer<ItemStack> animationControllerContainer) {
