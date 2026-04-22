@@ -32,6 +32,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.github.melodiccougar7.aeronautics_slicer.client.rendering.SLSRenderer;
+import org.github.melodiccougar7.aeronautics_slicer.registry.ModRegistry;
 import org.slf4j.Logger;
 
 import static org.github.melodiccougar7.aeronautics_slicer.registry.ModRegistry.*;

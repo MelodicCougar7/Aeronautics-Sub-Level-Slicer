@@ -10,12 +10,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.github.melodiccougar7.aeronautics_slicer.ModClass;
-import org.github.melodiccougar7.aeronautics_slicer.items.SubLevelSlicerItem;
 import org.github.melodiccougar7.aeronautics_slicer.util.SLSData;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,6 +29,7 @@ public class SLSAnimator extends AzItemAnimator {
     public void registerControllers(AzAnimationControllerContainer<ItemStack> animationControllerContainer) {
         animationControllerContainer.add(
                 AzAnimationController.builder(this, "base_controller")
+                        .setTransitionLength(10) //give this a shot when everything finally works...
                         .setKeyframeCallbacks(
                                 AzKeyframeCallbacks.<ItemStack>builder()
                                         .setCustomInstructionKeyframeHandler(
