@@ -3,12 +3,16 @@ package org.github.melodiccougar7.aeronautics_slicer.items;
 import dev.ryanhcode.sable.api.SubLevelAssemblyHelper;
 import dev.ryanhcode.sable.companion.math.BoundingBox3i;
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
+import mod.azure.azurelib.AzureLib;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
@@ -18,14 +22,15 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.github.melodiccougar7.aeronautics_slicer.client.animation.SLSDispatcher;
 import org.github.melodiccougar7.aeronautics_slicer.util.SLSData;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.UUID;
 
 public class SubLevelSlicerItem extends Item {
 
     private final int acceleration = 5;
     private final float speedCap = 100;
-    public int progress = 0;
 
     public final SLSDispatcher dispatcher;
 
@@ -37,26 +42,66 @@ public class SubLevelSlicerItem extends Item {
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
-        if (!level.isClientSide) {
 
+        if (stack.get(AzureLib.AZ_ID.get()) == null) {
+            stack.set(AzureLib.AZ_ID.get(), UUID.randomUUID());
         }
-    }
 
-    @Override
-    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
-        super.onUseTick(level, livingEntity, stack, remainingUseDuration);
-        if (livingEntity instanceof Player player && !level.isClientSide()) {
+        if (entity instanceof Player player && !level.isClientSide()) {
             float diskSpeed = stack.getOrDefault(SLSData.DISK_SPEED, 0f);
             if (diskSpeed < speedCap) {
                 stack.set(SLSData.DISK_SPEED.get(), ((diskSpeed + (acceleration / 20))));
             }
 
-            dispatcher.active(player, stack);
-            if (progress == 100) { // go back and make the time it takes configurable, and block category based
+            float progress = stack.getOrDefault(SLSData.PROGRESS, 0f);
+
+            if (progress >= 25) { // go back and make the time it takes configurable, and block category based
                 SingleSubLevelCreator(player);
+                stack.set(SLSData.PROGRESS.get(), 0f);
             } else {
-                progress += 1;
+                stack.set(SLSData.PROGRESS.get(), stack.getOrDefault(SLSData.PROGRESS, 0f) + 1f);
             }
+        }
+
+        if (entity instanceof Player player && level.isClientSide()) {
+            dispatcher.active(player, stack);
+
+        }
+    }
+
+    @Override
+    public void inventoryTick(
+            @NotNull ItemStack stack,
+            Level level,
+            @NotNull Entity entity,
+            int slotId,
+            boolean isSelected
+    ) {
+        if (stack.get(AzureLib.AZ_ID.get()) == null) {
+            stack.set(AzureLib.AZ_ID.get(), UUID.randomUUID());
+        }
+
+
+        if (
+                !level.isClientSide() && stack.is(this) && entity instanceof LivingEntity livingEntity &&
+                        !livingEntity.isUsingItem() && livingEntity instanceof Player player &&
+                        !player.getCooldowns().isOnCooldown(stack.getItem())
+        ) {
+            dispatcher.idling(entity, stack);
+        }
+        super.inventoryTick(stack, level, entity, slotId, isSelected);
+    }
+
+
+    @Override
+    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
+        super.onUseTick(level, livingEntity, stack, remainingUseDuration);
+        if (livingEntity instanceof Player player && level.isClientSide()) {
+//            float diskSpeed = stack.getOrDefault(SLSData.DISK_SPEED, 0f);
+//            if (diskSpeed < speedCap) {
+//                stack.set(SLSData.DISK_SPEED.get(), ((diskSpeed + (acceleration / 20))));
+//            }
+            dispatcher.active(player, stack);
         }
     }
 

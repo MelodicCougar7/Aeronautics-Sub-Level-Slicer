@@ -1,6 +1,7 @@
 package org.github.melodiccougar7.aeronautics_slicer;
 
 import com.mojang.logging.LogUtils;
+import mod.azure.azurelib.common.animation.cache.AzIdentityRegistry;
 import mod.azure.azurelib.common.render.item.AzItemRendererRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -33,6 +34,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.github.melodiccougar7.aeronautics_slicer.client.rendering.SLSRenderer;
 import org.github.melodiccougar7.aeronautics_slicer.registry.ModRegistry;
+import org.github.melodiccougar7.aeronautics_slicer.util.SLSData;
 import org.slf4j.Logger;
 
 import static org.github.melodiccougar7.aeronautics_slicer.registry.ModRegistry.*;
@@ -50,38 +52,29 @@ public class ModClass {
 
         ITEMS.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
+        SLSDATA.register(modEventBus);
+        SLSData.SLSDATA.register(modEventBus);
 
-        // Register ourselves for server and other game events we are interested in.
-        // Note that this is necessary if and only if we want *this* class (ModClass) to respond directly to events.
-        // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
         NeoForge.EVENT_BUS.register(this);
-
-        // Register the item to a creative tab
-        //modEventBus.addListener(this::addCreative);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-
+        AzIdentityRegistry.register(SUBLEVEL_SLICER.get());
     }
 
-//    // Add the example block item to the building blocks tab
-//    private void addCreative(BuildCreativeModeTabContentsEvent event) {
-//        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) event.accept(SUBLEVEL_SLICER);
-//    }
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        // Do something when the server starts
-        //LOGGER.info("HELLO from server starting");
+
     }
 
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @EventBusSubscriber(modid = MODID, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            AzItemRendererRegistry.register(SLSRenderer::new, SUBLEVEL_SLICER.get());
+            event.enqueueWork(() -> {
+                AzIdentityRegistry.register(SUBLEVEL_SLICER.get());
+            });
         }
     }
 }

@@ -16,9 +16,15 @@ public class SLSData {
     public static final Supplier<DataComponentType<Float>> DISK_SPEED =
             SLSDATA.register("disk_rot", () ->
                     DataComponentType.<Float>builder()
-                            .persistent(Codec.FLOAT)   // saved to disk
-                            .networkSynchronized(ByteBufCodecs.FLOAT)     // synced to client
+                            .persistent(Codec.FLOAT)
+                            .networkSynchronized(ByteBufCodecs.FLOAT)
                             .build()
             );
-
+    public static final Supplier<DataComponentType<Float>> PROGRESS = // should be an int but was uncooperative
+            SLSDATA.register("progress", () ->
+                    DataComponentType.<Float>builder()
+                            .persistent(Codec.FLOAT)
+                            .networkSynchronized(ByteBufCodecs.FLOAT)
+                            .build()
+            );
 }

@@ -22,7 +22,7 @@ public class SLSAnimator extends AzItemAnimator {
 
     private static final ResourceLocation ANIMATIONS = ResourceLocation.fromNamespaceAndPath(
             ModClass.MODID,
-            "animations/item/sublevelslicer.animation.json"
+            "animations/item/sublevel_slicer.animation.json"
     );
 
     @Override
