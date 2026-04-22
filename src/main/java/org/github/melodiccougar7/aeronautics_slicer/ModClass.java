@@ -74,6 +74,7 @@ public class ModClass {
         public static void onClientSetup(FMLClientSetupEvent event) {
             event.enqueueWork(() -> {
                 AzIdentityRegistry.register(SUBLEVEL_SLICER.get());
+                AzItemRendererRegistry.register(SLSRenderer::new, SUBLEVEL_SLICER.get());
             });
         }
     }
