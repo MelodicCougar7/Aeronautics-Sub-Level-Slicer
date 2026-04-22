@@ -16,12 +16,12 @@ public class SLSRenderer extends AzItemRenderer {
 
     private static final ResourceLocation GEO = ResourceLocation.fromNamespaceAndPath(
             MODID,
-            "geo/items/sublevelslicer.geo.json"
+            "geo/items/sublevel_slicer.geo.json"
     );
 
     private static final ResourceLocation TEX = ResourceLocation.fromNamespaceAndPath(
             MODID,
-            "textures/item/sublevelslicer.png"
+            "textures/item/sublevel_slicer.png"
     );
 
     public SLSRenderer() {
