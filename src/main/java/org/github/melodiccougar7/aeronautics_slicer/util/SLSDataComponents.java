@@ -8,7 +8,7 @@ import org.github.melodiccougar7.aeronautics_slicer.ModClass;
 
 import java.util.function.Supplier;
 
-public class SLSData {
+public class SLSDataComponents {
 
     public static final DeferredRegister<DataComponentType<?>> SLSDATA =
             DeferredRegister.createDataComponents(ModClass.MODID);
@@ -20,8 +20,15 @@ public class SLSData {
                             .networkSynchronized(ByteBufCodecs.FLOAT)
                             .build()
             );
-    public static final Supplier<DataComponentType<Float>> PROGRESS = // should be an int but was uncooperative
-            SLSDATA.register("progress", () ->
+    public static final Supplier<DataComponentType<Float>> ANIM_COOLDOWN = // should be an int but was uncooperative
+            SLSDATA.register("anim_cooldown", () ->
+                    DataComponentType.<Float>builder()
+                            .persistent(Codec.FLOAT)
+                            .networkSynchronized(ByteBufCodecs.FLOAT)
+                            .build()
+            );
+    public static final Supplier<DataComponentType<Float>> STATE = // should be an int but was uncooperative
+            SLSDATA.register("state", () ->
                     DataComponentType.<Float>builder()
                             .persistent(Codec.FLOAT)
                             .networkSynchronized(ByteBufCodecs.FLOAT)

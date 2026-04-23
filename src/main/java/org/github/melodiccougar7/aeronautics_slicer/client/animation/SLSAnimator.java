@@ -14,10 +14,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.github.melodiccougar7.aeronautics_slicer.ModClass;
-import org.github.melodiccougar7.aeronautics_slicer.util.SLSData;
+import org.github.melodiccougar7.aeronautics_slicer.util.SLSDataComponents;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 public class SLSAnimator extends AzItemAnimator {
 
@@ -29,6 +30,8 @@ public class SLSAnimator extends AzItemAnimator {
     public SLSAnimator() {
         super(AzAnimatorConfig.defaultConfig());
     }
+
+    private static final Logger LOGGER = Logger.getLogger("aeronautics_slicer");
 
     @Override
     public void registerControllers(AzAnimationControllerContainer<ItemStack> animationControllerContainer) {
@@ -110,9 +113,10 @@ public class SLSAnimator extends AzItemAnimator {
         AzBoneCache boneCache = this.context().boneCache();
         Optional<AzBone> disk = boneCache.getBakedModel().getBone("disk");
 
-        float speed = animatable.getOrDefault(SLSData.DISK_SPEED, 0f);
+        float speed = animatable.getOrDefault(SLSDataComponents.DISK_SPEED, 5f);
+        speed = 5f; // for testing only
         disk.get().setRotY(Mth.cos(disk.get().getRotY() + speed));
-
+        //LOGGER.info("speed: " + speed + " disk RotY: " + disk.get().getRotY());
     }
 
 }
