@@ -20,7 +20,7 @@ public class ModRegistry {
     public static final DeferredItem<SubLevelSlicerItem> SUBLEVEL_SLICER = ITEMS.registerItem("sublevel_slicer", props -> new SubLevelSlicerItem(props.stacksTo(1)));
     //public static final DeferredItem<SubLevelSlicerItem> SUBLEVEL_SLICER = ITEMS.registerItem();
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> AERO_SLICER_TAB = CREATIVE_MODE_TABS.register("aeronautics_slicer", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.aeronautics_slicer")).icon(() -> SUBLEVEL_SLICER.get().getDefaultInstance()).displayItems((parameters, output) -> {
-    output.accept(SUBLEVEL_SLICER.get());
+        output.accept(SUBLEVEL_SLICER.get());
     }).build());
 
     public static final DeferredRegister<DataComponentType<?>> SLSDATA = DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, MODID);

@@ -14,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -30,33 +31,24 @@ public class SubLevelSlicerItem extends Item {
 
     private final int acceleration = 5;
     private final float speedCap = 100;
+    private boolean animActiveSent = false;
     //private int animState;
     //private int animCooldown;
 
-    public final SLSDispatcher dispatcher;
-
     public SubLevelSlicerItem(Properties properties) {
         super(properties);
-        this.dispatcher = new SLSDispatcher();
         //this.animState = 1;
-       //this.animCooldown = 0;
+        //this.animCooldown = 0;
     }
+
+    @Override public @NotNull UseAnim getUseAnimation(@NotNull ItemStack s) { return UseAnim.NONE; }
 
     @Override
     public void inventoryTick(@NotNull ItemStack stack, Level level, @NotNull Entity entity, int slotId, boolean isSelected) {
         if (!level.isClientSide()) {
             Player player = (Player) entity;
-
-            // critical to functionality, do not touch
-            if (stack.get(AzureLib.AZ_ID.get()) == null) {
-                stack.set(AzureLib.AZ_ID.get(), UUID.randomUUID());
-            }
-
             // fetch cooldown stat from item itself
-
-
             // set animation to idle or reduce cooldown
-
             float animCooldown = stack.getOrDefault(SLSDataComponents.ANIM_COOLDOWN, 0f);
             if (animCooldown > 0) {
                 stack.set(SLSDataComponents.ANIM_COOLDOWN.get(), animCooldown - 1);
@@ -88,12 +80,16 @@ public class SubLevelSlicerItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         SingleSubLevelCreator((Player) entity);
-        animChanger(4, stack, (Player) entity); // might want to remove this
+        animActiveSent = false;
+        float animCooldown = stack.getOrDefault(SLSDataComponents.ANIM_COOLDOWN, 0f);
+        stack.set(SLSDataComponents.ANIM_COOLDOWN.get(), animCooldown + 10);
+        animChanger(4, stack, (Player) entity);
         return stack;
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int integer) {
+        animActiveSent = false;
         animChanger(4, stack, (Player) entity, 10);
     }
 
@@ -106,14 +102,16 @@ public class SubLevelSlicerItem extends Item {
             if (diskSpeed < speedCap) {
                 stack.set(SLSDataComponents.DISK_SPEED.get(), ((diskSpeed + (acceleration / 20))));
             }
-            float animState = stack.getOrDefault(SLSDataComponents.STATE, 0f);
-            if (animState == 1f) {
-                animChanger(2, stack, player,10); // necessary to prevent the following line from overriding this the subsequent tick
-            } else {
-                animChanger(3, stack, player);
+
+            if (!animActiveSent) {
+                float animState = stack.getOrDefault(SLSDataComponents.STATE, 1f);
+                if (animState == 1f) {
+                    animChanger(2, stack, player, 10);
+                } else {
+                    animChanger(3, stack, player);
+                }
+                animActiveSent = true;
             }
-
-
         }
     }
 
@@ -139,35 +137,31 @@ public class SubLevelSlicerItem extends Item {
 
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return 50; // tweak to depend on whatever block is being looked at
+        return 72000;
     }
 
-    /* This method will return if there is an ongoing cooldown */
+
     private void animChanger(float state, ItemStack stack, Player player, float cooldown) {
         float animState = stack.getOrDefault(SLSDataComponents.STATE, 1f);
 
         if (animState == state) {return;}
-        float animCooldown = stack.getOrDefault(SLSDataComponents.ANIM_COOLDOWN, 0f);
-
-        if (animCooldown > 0) {return;}
         switch ((int) state) {
             case 1:
-                dispatcher.idling(player, stack);
+                SLSDispatcher.idling(player, stack);
                 break;
             case 2:
-                dispatcher.windUp(player, stack);
+                SLSDispatcher.windUp(player, stack);
                 break;
             case 3:
-                dispatcher.active(player, stack);
+                SLSDispatcher.active(player, stack);
                 break;
             case 4:
-                dispatcher.windDown(player, stack);
+                SLSDispatcher.windDown(player, stack);
                 break;
             default:
-                dispatcher.idling(player, stack);
+                SLSDispatcher.idling(player, stack);
         }
         stack.set(SLSDataComponents.STATE.get(), state);
-        stack.set(SLSDataComponents.ANIM_COOLDOWN.get(), animCooldown + cooldown);
     }
 
     private void animChanger(int state, ItemStack stack, Player player) {

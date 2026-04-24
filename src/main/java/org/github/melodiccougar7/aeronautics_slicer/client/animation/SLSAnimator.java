@@ -37,7 +37,7 @@ public class SLSAnimator extends AzItemAnimator {
     public void registerControllers(AzAnimationControllerContainer<ItemStack> animationControllerContainer) {
         animationControllerContainer.add(
                 AzAnimationController.builder(this, "base_controller")
-                        .setTransitionLength(10) //give this a shot when everything finally works...
+                        .setTransitionLength(0) //give this a shot when everything finally works...
                         .setKeyframeCallbacks(
                                 AzKeyframeCallbacks.<ItemStack>builder()
                                         .setCustomInstructionKeyframeHandler(

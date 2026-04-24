@@ -30,9 +30,9 @@ public class SLSRenderer extends AzItemRenderer {
                 AzItemRendererConfig.builder(GEO, TEX)
                         .setAnimatorProvider(SLSAnimator::new)
                         .useNewOffset(true) //per the wiki's instruction, will circle back once the BB plugin is fixed
-                        //.setShouldAnimateInContext(context -> context != ItemDisplayContext.GUI && context != ItemDisplayContext.FIXED)
+                        .disableAnimationInContexts(ItemDisplayContext.GUI)
+                        .setShouldAnimateInContext(context -> context != ItemDisplayContext.GUI && context != ItemDisplayContext.FIXED)
                         .build()
         );
     }
-
 }
