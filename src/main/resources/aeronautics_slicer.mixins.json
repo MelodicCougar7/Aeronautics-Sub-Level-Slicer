@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "org.github.melodiccougar7.aeronautics_slicer.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "HeldItemRendererMixin"
+  ],
+  "client": [],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
