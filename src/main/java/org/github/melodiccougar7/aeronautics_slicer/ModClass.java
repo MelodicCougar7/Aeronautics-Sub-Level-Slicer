@@ -14,6 +14,7 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.github.melodiccougar7.aeronautics_slicer.client.rendering.SLSRenderer;
+import org.github.melodiccougar7.aeronautics_slicer.client.sounds.ModSounds;
 import org.github.melodiccougar7.aeronautics_slicer.util.SLSDataComponents;
 import org.slf4j.Logger;
 
@@ -34,6 +35,7 @@ public class ModClass {
         CREATIVE_MODE_TABS.register(modEventBus);
         SLSDATA.register(modEventBus);
         SLSDataComponents.SLSDATA.register(modEventBus);
+        ModSounds.SOUND_EVENTS.register(modEventBus);
 
         NeoForge.EVENT_BUS.register(this);
     }

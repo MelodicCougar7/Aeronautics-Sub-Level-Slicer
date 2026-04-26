@@ -113,9 +113,23 @@ public class SLSAnimator extends AzItemAnimator {
         AzBoneCache boneCache = this.context().boneCache();
         Optional<AzBone> disk = boneCache.getBakedModel().getBone("disk");
 
-        float speed = animatable.getOrDefault(SLSDataComponents.DISK_SPEED, 5f);
-        speed = 5f; // for testing only
-        disk.get().setRotY(Mth.cos(disk.get().getRotY() + speed));
+        float speed = animatable.getOrDefault(SLSDataComponents.DISK_SPEED, 0f);
+        int animState = (int) (float) animatable.getOrDefault(SLSDataComponents.STATE, 0f);
+
+        if (animState == 1 || animState == 4) {
+            if (speed >= 0.05f) {
+                animatable.set(SLSDataComponents.DISK_SPEED.get(), (speed - 0.05f));
+            }
+        } else if (animState == 2 || animState == 3) {
+            if (speed < 2f) {
+                animatable.set(SLSDataComponents.DISK_SPEED.get(), (speed + 0.3f));
+            }
+        }
+
+        if (disk.isPresent()) {
+            //disk.get().setRotY(Mth.cos(disk.get().getRotY() + speed));
+            disk.get().setRotY(disk.get().getRotY() + animatable.getOrDefault(SLSDataComponents.DISK_SPEED, 0f));
+        }
         //LOGGER.info("speed: " + speed + " disk RotY: " + disk.get().getRotY());
     }
 

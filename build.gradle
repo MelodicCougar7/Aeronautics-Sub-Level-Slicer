@@ -109,6 +109,7 @@ dependencies {
     implementation "curse.maven:create-328085:7408951"
     implementation "maven.modrinth:sable:1.0.6+mc1.21.1"
     implementation "maven.modrinth:create-aeronautics:1.0.3+mc1.21.1"
+    implementation "curse.maven:jsconfig-1186372:6515777"
 
 }
 

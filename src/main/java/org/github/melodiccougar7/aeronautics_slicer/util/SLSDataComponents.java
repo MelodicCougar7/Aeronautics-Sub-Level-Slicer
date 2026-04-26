@@ -1,6 +1,7 @@
 package org.github.melodiccougar7.aeronautics_slicer.util;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -29,6 +30,20 @@ public class SLSDataComponents {
             );
     public static final Supplier<DataComponentType<Float>> STATE = // should be an int but was uncooperative
             SLSDATA.register("state", () ->
+                    DataComponentType.<Float>builder()
+                            .persistent(Codec.FLOAT)
+                            .networkSynchronized(ByteBufCodecs.FLOAT)
+                            .build()
+            );
+    public static final Supplier<DataComponentType<BlockPos>> TARGET =
+           SLSDATA.register("target", () ->
+                    DataComponentType.<BlockPos>builder()
+                            .persistent(BlockPos.CODEC)
+                            .networkSynchronized(BlockPos.STREAM_CODEC)
+                            .build()
+            );
+    public static final Supplier<DataComponentType<Float>> PROGRESS = // should be an int but was uncooperative
+            SLSDATA.register("progress", () ->
                     DataComponentType.<Float>builder()
                             .persistent(Codec.FLOAT)
                             .networkSynchronized(ByteBufCodecs.FLOAT)

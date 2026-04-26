@@ -41,7 +41,7 @@ public abstract class HeldItemRendererMixin {
         this.minecraft = client;
     }
 
-    @Inject(method = "tick", at = @At("TAIL"))
+    @Inject(method = "tick", at = @At("HEAD"))
     public void fguns$cancelAnimation(CallbackInfo ci) {
         var clientPlayerEntity = this.minecraft.player;
         var itemStack = clientPlayerEntity.getMainHandItem();
