@@ -104,7 +104,7 @@ public class SubLevelSlicerItem extends Item {
         if (livingEntity instanceof Player player && !level.isClientSide()) {
             float diskSpeed = stack.getOrDefault(SLSDataComponents.DISK_SPEED, 0f);
             if (diskSpeed < speedCap) {
-                stack.set(SLSDataComponents.DISK_SPEED.get(), ((diskSpeed + (acceleration / 20))));
+                stack.set(SLSDataComponents.DISK_SPEED.get(), ((diskSpeed + (acceleration / 20f))));
             }
             float animState = stack.getOrDefault(SLSDataComponents.STATE, 0f);
             if (animState == 1f) {
